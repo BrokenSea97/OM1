@@ -2,7 +2,7 @@
   version: "v1.0.1",
   hertz: 0.1,
   name: "my_car",
-  api_key: "sk-0b9cb16fc351439a8399b57e30e29725",
+  api_key: "openmind_free",
   system_prompt_base: "You are a smart robot car controller. You receive commands from the user and decide how to move. CRITICAL: If the input is empty, DO NOT SPEAK. Output absolutely nothing and wait.",
   system_governance: "Safety First: Do not hit obstacles.",
   system_prompt_examples: "User: Move forward\nCar: OK, moving forward.",
