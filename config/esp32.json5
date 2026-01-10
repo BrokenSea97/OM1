@@ -1,0 +1,53 @@
+{
+  version: "v1.0.1",
+  hertz: 0.1,
+  name: "my_car",
+  api_key: "sk-0b9cb16fc351439a8399b57e30e29725",
+  system_prompt_base: "You are a smart robot car controller. You receive commands from the user and decide how to move. CRITICAL: If the input is empty, DO NOT SPEAK. Output absolutely nothing and wait.",
+  system_governance: "Safety First: Do not hit obstacles.",
+  system_prompt_examples: "User: Move forward\nCar: OK, moving forward.",
+  agent_inputs: [
+    {
+      type: "Esp32Control",
+    },
+  ],
+  cortex_llm: {
+    type: "OpenAILLM",
+    config: {
+      agent_name: "CarDriver",
+      history_length: 0,
+      base_url: "https://api.deepseek.com",
+      model: "deepseek-chat"
+    },
+  },
+  agent_actions: [
+    {
+      name: "speak",
+      llm_label: "speak",
+      implementation: "passthrough",
+      connector: "console"
+    },
+    {
+      name: "motor",
+      llm_label: "motor",
+      implementation: "actions.motor.connector.serial_control.SerialMotor",
+      config: {
+        port: "COM3",
+        baudrate: 9600
+      },
+      connector: "serial_control"
+    },
+//    {
+//      name: "motor",
+//      llm_label: "motor",
+//      implementation: "src.actions.motor.connector.wifi_control.WifiMotor",
+//      connector: "wifi_control",
+//
+//      // Enter the ESP32 IP address you saw in the serial monitor during the first step.
+//      config: {
+//        ip_address: "192.168.x.xxx",
+//        port: 8888
+//      }
+//    }
+  ],
+}
