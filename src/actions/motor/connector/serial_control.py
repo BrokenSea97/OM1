@@ -38,7 +38,11 @@ class SerialMotor(ActionConnector[SerialMotorConfig, MotorInput]):
         if not self._ensure_connection():
             return
 
-        action_str = output_interface.action.value
+        action_str = (
+            output_interface.action.value
+            if hasattr(output_interface.action, "value")
+            else output_interface.action
+        )
         logging.info(f"Received Motor Command: {action_str}")
 
         signal_map = {

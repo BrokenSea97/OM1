@@ -3,7 +3,7 @@ import logging
 import threading
 import time
 from queue import Empty, Queue
-from typing import List, Optional
+from typing import Optional
 
 from pydantic import Field
 
@@ -12,13 +12,16 @@ from inputs.base.loop import FuserInput
 from providers.io_provider import IOProvider
 from providers.teleops_conversation_provider import TeleopsConversationProvider
 
+
 class Esp32ControlConfig(SensorConfig):
     api_key: Optional[str] = Field(default=None, description="API Key")
+
 
 class Esp32Control(FuserInput[Esp32ControlConfig, Optional[str]]):
     def __init__(self, config: Esp32ControlConfig):
         super().__init__(config)
-        self.messages: List[str] = []
+        self.running = True
+        self.messages: list[str] = []
         self.descriptor_for_LLM = "User"
         self.io_provider = IOProvider()
         self.message_buffer: Queue[str] = Queue()
@@ -26,14 +29,12 @@ class Esp32Control(FuserInput[Esp32ControlConfig, Optional[str]]):
         api_key = self.config.api_key
         self.conversation_provider = TeleopsConversationProvider(api_key=api_key)
 
-        self.running = True
         self.input_thread = threading.Thread(target=self._input_loop, daemon=True)
         self.input_thread.start()
 
         logging.info(">>> ESP32 Control Ready: Type command for robot <<<")
 
     def _input_loop(self):
-        """后台线程：负责监听键盘"""
         while self.running:
             try:
                 user_input = input()
@@ -47,14 +48,12 @@ class Esp32Control(FuserInput[Esp32ControlConfig, Optional[str]]):
                 break
 
     async def _poll(self) -> Optional[str]:
-        while self.running:
-            try:
-                message = self.message_buffer.get_nowait()
-                return message
-            except Empty:
-                await asyncio.sleep(0.1)
-
-        return None
+        await asyncio.sleep(0.1)
+        try:
+            message = self.message_buffer.get_nowait()
+            return message
+        except Empty:
+            return None
 
     async def _raw_to_text(self, raw_input: Optional[str]) -> Optional[Message]:
         if raw_input is None:
