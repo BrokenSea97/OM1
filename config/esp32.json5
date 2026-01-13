@@ -2,7 +2,7 @@
   version: "v1.0.1",
   hertz: 0.1,
   name: "my_car",
-  api_key: "sk-0b9cb16fc351439a8399b57e30e29725",
+  api_key: "om1_live_b696ae24f9c9fed773d97f8eb8719aee519634d03b5c0772",
   system_prompt_base: "You are a smart robot car controller. You receive commands from the user and decide how to move. CRITICAL: If AVAILABLE INPUTS section is empty or contains no actual user commands, return completely empty response with no actions. Do NOT speak, do NOT move, just return empty.",
   system_governance: "Safety First: Do not hit obstacles.",
   system_prompt_examples: "User: Move forward\nCar: OK, moving forward.",
@@ -10,14 +10,17 @@
     {
       type: "Esp32Control",
     },
+    {
+      type: "StatusReporter"
+    },
   ],
   cortex_llm: {
     type: "OpenAILLM",
     config: {
       agent_name: "CarDriver",
       history_length: 0,
-      base_url: "https://api.deepseek.com",
-      model: "deepseek-chat"
+//      base_url: "https://api.deepseek.com",
+//      model: "deepseek-chat"
     },
   },
   agent_actions: [
@@ -49,5 +52,5 @@
 //        port: 8888
 //      }
 //    }
-  ],
+  ]
 }

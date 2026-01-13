@@ -516,10 +516,5 @@ class CortexRuntime:
             # Trigger the actions
             await self.action_orchestrator.promise(output.actions)
 
-            # Trigger the simulators
-            await self.simulator_orchestrator.promise(output.actions)
-
-            # Trigger the actions
-            await self.action_orchestrator.promise(output.actions)
         except Exception as error:
             logging.error(f"Error in cortex tick: {error}")
