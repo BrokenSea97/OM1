@@ -13,6 +13,15 @@
     {
       type: "StatusReporter"
     },
+    {
+      type: "Esp32CamVideo",
+      config: {
+        stream_url: "http://192.168.1.100:81/stream",
+        stream_type: "http",
+        fps: 5,
+        analyze_with_vlm: false
+      }
+    },
   ],
   cortex_llm: {
     type: "OpenAILLM",
