@@ -493,11 +493,6 @@ class CortexRuntime:
 
             # collect all the latest inputs
             finished_promises, _ = await self.action_orchestrator.flush_promises()
-
-            # Check if any input has valid data before processing
-            if not self.fuser.has_valid_inputs(self.config.agent_inputs):
-                return
-
             # combine those inputs into a suitable prompt
             prompt = self.fuser.fuse(self.config.agent_inputs, finished_promises)
             if prompt is None:
@@ -509,12 +504,6 @@ class CortexRuntime:
             if output is None:
                 logging.debug("No output from LLM")
                 return
-
-            # Trigger the simulators
-            await self.simulator_orchestrator.promise(output.actions)
-
-            # Trigger the actions
-            await self.action_orchestrator.promise(output.actions)
 
             # Trigger the simulators
             await self.simulator_orchestrator.promise(output.actions)

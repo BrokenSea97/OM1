@@ -39,30 +39,6 @@ class Fuser:
         """
         self.config = config
         self.io_provider = IOProvider()
-
-    def has_valid_inputs(self, inputs: list[Sensor]) -> bool:
-        """
-        Check if any of the inputs have valid data.
-
-        This helper method can be used to skip unnecessary LLM calls
-        when no valid inputs are available.
-
-        Parameters
-        ----------
-        inputs : list[Sensor]
-            List of agent input objects containing latest input buffers.
-
-        Returns
-        -------
-        bool
-            True if at least one input has valid data, False otherwise.
-        """
-        for input_obj in inputs:
-            messages = getattr(input_obj, "messages", None)
-            if messages and len(messages) > 0:
-                return True
-        return False
-
     def fuse(self, inputs: list[Sensor], finished_promises: list[T.Any]) -> str:
         """
         Combine all inputs into a single formatted prompt string.
